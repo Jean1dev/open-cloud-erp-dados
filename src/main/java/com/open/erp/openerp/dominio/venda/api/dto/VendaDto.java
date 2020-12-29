@@ -17,6 +17,8 @@ public class VendaDto implements Serializable {
 
     private List<ItemVendaDto> itens;
 
+    private String cliente;
+
     @Getter
     @Setter
     @AllArgsConstructor

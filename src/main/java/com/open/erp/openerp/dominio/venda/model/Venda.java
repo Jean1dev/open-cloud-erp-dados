@@ -25,4 +25,6 @@ public class Venda implements Serializable {
     private BigDecimal valorTotal;
 
     private List<ItemVenda> itens;
+
+    private ClienteAgregado cliente;
 }
