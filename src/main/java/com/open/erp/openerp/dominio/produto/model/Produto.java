@@ -23,4 +23,6 @@ public class Produto implements Serializable {
     private String ca;
 
     private BigDecimal estoque;
+
+    private BigDecimal valorVenda;
 }
