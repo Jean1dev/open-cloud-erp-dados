@@ -1,9 +1,9 @@
 package com.open.erp.openerp.dominio.compra.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -21,6 +21,7 @@ public class Compra implements Serializable {
     @Id
     private String id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataCompra;
 
     private BigDecimal valorTotal;

@@ -1,5 +1,6 @@
 package com.open.erp.openerp.dominio.venda.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,6 +21,7 @@ public class Venda implements Serializable {
     @Id
     private String id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataVenda;
 
     private BigDecimal valorTotal;
