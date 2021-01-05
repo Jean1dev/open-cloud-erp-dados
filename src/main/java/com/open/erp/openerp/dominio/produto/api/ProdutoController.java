@@ -38,6 +38,7 @@ public class ProdutoController {
         p.setCa(produto.getCa());
         p.setValorVenda(produto.getValorVenda());
         p.setNome(produto.getNome());
+        p.setEstoque(produto.getEstoque());
         repository.save(p);
     }
 }
