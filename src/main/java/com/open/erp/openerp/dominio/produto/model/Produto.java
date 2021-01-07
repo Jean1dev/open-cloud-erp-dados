@@ -25,4 +25,6 @@ public class Produto implements Serializable {
     private BigDecimal estoque;
 
     private BigDecimal valorVenda;
+
+    private BigDecimal valorCompra;
 }
