@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.open.erp.openerp.dominio.produto.service.ProdutoService;
 import com.open.erp.openerp.dominio.venda.model.Venda;
 import org.slf4j.Logger;
@@ -70,10 +71,15 @@ public class ComprovanteVendaPdfReport {
 
         document.add(new Paragraph());
         document.add(new Paragraph());
-        document.add(new Paragraph());
 
         document.add(table);
+        document.add(new LineSeparator());
         document.add(new Paragraph("Valor total R$:" + venda.getValorTotal()));
+
+        if (Objects.nonNull(venda.getValorAReceber())) {
+            document.add(new Paragraph("Valor recebido nessa venda foi de R$:" + venda.getValorRecebido()));
+            document.add(new Paragraph("O cliente ainda deve um valor de R$: " + venda.getValorAReceber()));
+        }
 
         document.close();
 

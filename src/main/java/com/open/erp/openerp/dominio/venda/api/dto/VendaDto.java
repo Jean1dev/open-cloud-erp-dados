@@ -19,6 +19,8 @@ public class VendaDto implements Serializable {
 
     private String cliente;
 
+    private BigDecimal valorRecebido;
+
     @Getter
     @Setter
     @AllArgsConstructor

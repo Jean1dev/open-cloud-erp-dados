@@ -46,6 +46,7 @@ public class VendaService {
                 .itens(itens)
                 .dataVenda(LocalDate.now())
                 .cliente(getCliente(dto.getCliente()))
+                .valorRecebido(dto.getValorRecebido())
                 .build());
     }
 
