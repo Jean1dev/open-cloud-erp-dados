@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Document
 public class Venda implements Serializable {
@@ -26,7 +26,36 @@ public class Venda implements Serializable {
 
     private BigDecimal valorTotal;
 
+    private BigDecimal valorRecebido;
+
+    private BigDecimal valorAReceber;
+
     private List<ItemVenda> itens;
 
     private ClienteAgregado cliente;
+
+    @Builder
+    private Venda(String id,
+                  LocalDate dataVenda,
+                  BigDecimal valorTotal,
+                  BigDecimal valorRecebido,
+                  BigDecimal valorAReceber,
+                  List<ItemVenda> itens,
+                  ClienteAgregado cliente) {
+        this.id = id;
+        this.dataVenda = dataVenda;
+        this.valorTotal = valorTotal;
+        this.valorRecebido = valorRecebido;
+        this.valorAReceber = valorAReceber;
+        this.itens = itens;
+        this.cliente = cliente;
+        this.valorAReceber = calcularValorAReceber();
+    }
+
+    private BigDecimal calcularValorAReceber() {
+        if (Objects.isNull(this.valorRecebido))
+            return null;
+
+        return this.valorTotal.subtract(valorRecebido);
+    }
 }
