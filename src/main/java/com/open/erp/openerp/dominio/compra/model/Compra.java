@@ -27,4 +27,6 @@ public class Compra implements Serializable {
     private BigDecimal valorTotal;
 
     private List<ItemCompra> itens;
+
+    private FornecedorAgregado fornecedor;
 }

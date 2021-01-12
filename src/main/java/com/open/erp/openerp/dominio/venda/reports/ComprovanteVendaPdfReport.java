@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -76,7 +77,7 @@ public class ComprovanteVendaPdfReport {
         document.add(new LineSeparator());
         document.add(new Paragraph("Valor total R$:" + venda.getValorTotal()));
 
-        if (Objects.nonNull(venda.getValorAReceber())) {
+        if (Objects.nonNull(venda.getValorAReceber()) && venda.getValorAReceber().compareTo(BigDecimal.ZERO) != 0) {
             document.add(new Paragraph("Valor recebido nessa venda foi de R$:" + venda.getValorRecebido()));
             document.add(new Paragraph("O cliente ainda deve um valor de R$: " + venda.getValorAReceber()));
         }

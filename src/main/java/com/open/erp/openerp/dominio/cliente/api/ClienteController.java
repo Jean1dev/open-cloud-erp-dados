@@ -2,7 +2,6 @@ package com.open.erp.openerp.dominio.cliente.api;
 
 import com.open.erp.openerp.dominio.cliente.model.Cliente;
 import com.open.erp.openerp.dominio.cliente.repository.ClienteRepository;
-import com.open.erp.openerp.dominio.produto.model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
