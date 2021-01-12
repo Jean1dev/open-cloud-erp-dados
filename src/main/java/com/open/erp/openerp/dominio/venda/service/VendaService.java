@@ -3,6 +3,7 @@ package com.open.erp.openerp.dominio.venda.service;
 import com.open.erp.openerp.dominio.cliente.model.Cliente;
 import com.open.erp.openerp.dominio.cliente.repository.ClienteRepository;
 import com.open.erp.openerp.dominio.estoque.service.EstoqueService;
+import com.open.erp.openerp.dominio.titulosreceber.service.TitulosReceberService;
 import com.open.erp.openerp.dominio.venda.api.dto.VendaDto;
 import com.open.erp.openerp.dominio.venda.model.ClienteAgregado;
 import com.open.erp.openerp.dominio.venda.model.ItemVenda;
@@ -29,6 +30,9 @@ public class VendaService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private TitulosReceberService titulosReceberService;
+
     public void efetuarVenda(VendaDto dto) {
         List<ItemVenda> itens = dto.getItens()
                 .stream()
@@ -41,13 +45,15 @@ public class VendaService {
 
         itens.forEach(itemCompra -> estoqueService.reduzirNoEstoque(itemCompra.getProdutoId(), itemCompra.getQuantidade()));
 
-        repository.save(Venda.builder()
+        Venda venda = repository.save(Venda.builder()
                 .valorTotal(total)
                 .itens(itens)
                 .dataVenda(LocalDate.now())
                 .cliente(getCliente(dto.getCliente()))
                 .valorRecebido(dto.getValorRecebido())
                 .build());
+
+        titulosReceberService.gerarTituloAPartirVenda(venda);
     }
 
     private ClienteAgregado getCliente(String cliente) {
