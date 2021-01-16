@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class Venda implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataVenda;
 
+    @Positive
     private BigDecimal valorTotal;
 
     private BigDecimal valorRecebido;
@@ -34,6 +36,8 @@ public class Venda implements Serializable {
 
     private ClienteAgregado cliente;
 
+    private Boolean mobile;
+
     @Builder
     private Venda(String id,
                   LocalDate dataVenda,
@@ -41,7 +45,8 @@ public class Venda implements Serializable {
                   BigDecimal valorRecebido,
                   BigDecimal valorAReceber,
                   List<ItemVenda> itens,
-                  ClienteAgregado cliente) {
+                  ClienteAgregado cliente,
+                  Boolean mobile) {
         this.id = id;
         this.dataVenda = dataVenda;
         this.valorTotal = valorTotal;
@@ -49,6 +54,7 @@ public class Venda implements Serializable {
         this.valorAReceber = valorAReceber;
         this.itens = itens;
         this.cliente = cliente;
+        this.mobile = mobile;
         this.valorAReceber = calcularValorAReceber();
     }
 

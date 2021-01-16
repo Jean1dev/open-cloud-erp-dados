@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class ClienteController {
     private ClienteRepository repository;
 
     @PostMapping
-    public void criar(@RequestBody Cliente cliente) {
+    public void criar(@Valid @RequestBody Cliente cliente) {
         repository.save(cliente);
     }
 

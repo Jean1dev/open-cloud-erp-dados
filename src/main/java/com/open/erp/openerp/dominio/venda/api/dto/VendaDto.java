@@ -21,6 +21,8 @@ public class VendaDto implements Serializable {
 
     private BigDecimal valorRecebido;
 
+    private Boolean mobile;
+
     @Getter
     @Setter
     @AllArgsConstructor
