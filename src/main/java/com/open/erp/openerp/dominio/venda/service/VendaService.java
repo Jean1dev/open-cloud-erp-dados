@@ -12,7 +12,9 @@ import com.open.erp.openerp.dominio.venda.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -40,8 +42,12 @@ public class VendaService {
                 .collect(Collectors.toList());
 
         BigDecimal total = itens.stream()
-                .map(item -> item.getValorTotal())
-                .reduce(BigDecimal.ZERO, (somatorio, valorUnitario) -> somatorio.add(valorUnitario));
+                .map(ItemVenda::getValorTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        total = total.setScale(2, RoundingMode.HALF_UP);
+
+        validarOperacao(dto, total);
 
         itens.forEach(itemCompra -> estoqueService.reduzirNoEstoque(itemCompra.getProdutoId(), itemCompra.getQuantidade()));
 
@@ -51,9 +57,18 @@ public class VendaService {
                 .dataVenda(LocalDate.now())
                 .cliente(getCliente(dto.getCliente()))
                 .valorRecebido(dto.getValorRecebido())
+                .mobile(dto.getMobile())
                 .build());
 
         titulosReceberService.gerarTituloAPartirVenda(venda);
+    }
+
+    private void validarOperacao(VendaDto dto, BigDecimal total) {
+        if (total.compareTo(BigDecimal.ZERO) == 0)
+            throw new ValidationException("Não é permitido venda com total zerado");
+
+        if (dto.getValorRecebido().compareTo(total) > 0)
+            throw new ValidationException("Valor recebido não pode ser superior ao da venda");
     }
 
     private ClienteAgregado getCliente(String cliente) {
