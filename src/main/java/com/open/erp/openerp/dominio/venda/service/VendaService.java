@@ -45,22 +45,23 @@ public class VendaService {
                 .map(ItemVenda::getValorTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        total = total.setScale(2, RoundingMode.HALF_UP);
-
         validarOperacao(dto, total);
-
         itens.forEach(itemCompra -> estoqueService.reduzirNoEstoque(itemCompra.getProdutoId(), itemCompra.getQuantidade()));
 
         Venda venda = repository.save(Venda.builder()
-                .valorTotal(total)
+                .valorTotal(arredondar(total))
                 .itens(itens)
                 .dataVenda(LocalDate.now())
                 .cliente(getCliente(dto.getCliente()))
-                .valorRecebido(dto.getValorRecebido())
+                .valorRecebido(arredondar(dto.getValorRecebido()))
                 .mobile(dto.getMobile())
                 .build());
 
         titulosReceberService.gerarTituloAPartirVenda(venda);
+    }
+
+    private BigDecimal arredondar(BigDecimal valor) {
+        return valor.setScale(2, RoundingMode.HALF_UP);
     }
 
     private void validarOperacao(VendaDto dto, BigDecimal total) {
