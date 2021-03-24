@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -50,7 +51,7 @@ public class VendaController {
     }
 
     @GetMapping(path = "gerar-comprovante", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> gerarComprovante(@RequestParam(value = "id") String id) throws DocumentException {
+    public ResponseEntity<InputStreamResource> gerarComprovante(@RequestParam(value = "id") String id) throws DocumentException, IOException {
         Venda venda = repository.findById(id).orElseThrow();
 
         ByteArrayInputStream comprovante = ComprovanteVendaPdfReport.gerarComprovante(venda, produtoService);
