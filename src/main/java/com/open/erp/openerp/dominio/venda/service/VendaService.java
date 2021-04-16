@@ -35,6 +35,23 @@ public class VendaService {
     @Autowired
     private TitulosReceberService titulosReceberService;
 
+    public void removerVenda(String vendaId) {
+        Venda venda = repository.findById(vendaId).orElseThrow();
+
+        if (venda.getValorRecebido().compareTo(venda.getValorTotal()) != 0)
+            removerTitulosAReceber(vendaId);
+
+        venda.getItens().forEach(
+                itemVenda -> estoqueService.adicionarNoEstoque(itemVenda.getProdutoId(), itemVenda.getQuantidade())
+        );
+
+        repository.delete(venda);
+    }
+
+    private void removerTitulosAReceber(String vendaId) {
+        titulosReceberService.removerTitulo(titulosReceberService.getTituloByVenda(vendaId));
+    }
+
     public void efetuarVenda(VendaDto dto) {
         List<ItemVenda> itens = dto.getItens()
                 .stream()

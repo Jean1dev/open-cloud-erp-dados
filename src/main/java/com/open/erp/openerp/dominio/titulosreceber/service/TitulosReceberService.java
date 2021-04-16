@@ -23,6 +23,14 @@ public class TitulosReceberService {
     @Autowired
     private VendaRepository vendaRepository;
 
+    public TituloAReceber getTituloByVenda(String vendaId) {
+        return repository.findByVendaId(vendaId);
+    }
+
+    public void removerTitulo(TituloAReceber tituloAReceber) {
+        repository.delete(tituloAReceber);
+    }
+
     public Set<TituloComVendaDto> getListagemDetalhadaPorCliente(String clienteId) {
         return repository.findAllByCliente(clienteId)
                 .stream()

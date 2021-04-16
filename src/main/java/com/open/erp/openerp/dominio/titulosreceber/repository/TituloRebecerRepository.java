@@ -16,4 +16,7 @@ public interface TituloRebecerRepository extends MongoRepository<TituloAReceber,
 
     @Query("{ 'quitado': false, 'clienteId': ?0 }")
     List<TituloAReceber> findAllByCliente(String clienteId);
+
+    @Query("{ 'vendaOrigem': ?0 }")
+    TituloAReceber findByVendaId(String vendaId);
 }

@@ -63,4 +63,9 @@ public class VendaController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(comprovante));
     }
+
+    @DeleteMapping(path = "{id}")
+    public void remove(@PathVariable("id") String vendaId) {
+        service.removerVenda(vendaId);
+    }
 }
