@@ -1,9 +1,6 @@
 package com.open.erp.openerp.dominio.venda.api.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,6 +10,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class VendaDto implements Serializable {
 
     private List<ItemVendaDto> itens;
@@ -27,6 +25,7 @@ public class VendaDto implements Serializable {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static final class ItemVendaDto implements Serializable {
 
         private String produtoId;
