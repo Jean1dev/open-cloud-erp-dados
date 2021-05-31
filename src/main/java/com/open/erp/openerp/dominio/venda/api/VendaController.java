@@ -47,7 +47,7 @@ public class VendaController {
     @GetMapping(path = "paginated")
     public Page<Venda> getPage(@RequestParam(value = "limit", defaultValue = "10", required = false) Integer limit,
                                @RequestParam(value = "offset", defaultValue = "0", required = false) Integer offset) {
-        return repository.findAll(PageRequest.of(offset, limit));
+        return repository.findAllByOrderByDataVendaDesc(PageRequest.of(offset, limit));
     }
 
     @GetMapping(path = "gerar-comprovante", produces = MediaType.APPLICATION_PDF_VALUE)
