@@ -5,9 +5,11 @@ import com.open.erp.openerp.dominio.cliente.repository.ClienteRepository;
 import com.open.erp.openerp.dominio.estoque.service.EstoqueService;
 import com.open.erp.openerp.dominio.titulosreceber.model.TituloAReceber;
 import com.open.erp.openerp.dominio.titulosreceber.service.TitulosReceberService;
+import com.open.erp.openerp.dominio.venda.api.dto.VendaDto;
 import com.open.erp.openerp.dominio.venda.model.ItemVenda;
 import com.open.erp.openerp.dominio.venda.model.Venda;
 import com.open.erp.openerp.dominio.venda.repository.VendaRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -15,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import javax.validation.ValidationException;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +42,54 @@ public class VendaServiceTest extends AplicationConfigTest {
 
     @Autowired
     private VendaService vendaService;
+
+    @Test
+    @DisplayName("deve lançar uma execao porque nao é permitido venda com total zerado")
+    public void deveLancarExceptionAoEfetuarVenda() {
+        VendaDto.ItemVendaDto item = VendaDto.ItemVendaDto.builder()
+                .produtoId("id")
+                .valorUnitario(BigDecimal.ZERO)
+                .quantidade(BigDecimal.ONE)
+                .build();
+
+        List<VendaDto.ItemVendaDto> itens = Collections.singletonList(item);
+        VendaDto dto = VendaDto.builder()
+                .itens(itens)
+                .cliente(null)
+                .valorRecebido(BigDecimal.ZERO)
+                .mobile(true)
+                .build();
+
+        Assertions.assertThrows(ValidationException.class, () -> vendaService.efetuarVenda(dto), "Não é permitido venda com total zerado");
+    }
+
+    @Test
+    @DisplayName("deve efetuar uma venda")
+    public void deveEfetuarVenda() {
+        VendaDto.ItemVendaDto item = VendaDto.ItemVendaDto.builder()
+                .produtoId("id")
+                .valorUnitario(BigDecimal.TEN)
+                .quantidade(BigDecimal.ONE)
+                .build();
+
+        List<VendaDto.ItemVendaDto> itens = Collections.singletonList(item);
+        VendaDto dto = VendaDto.builder()
+                .itens(itens)
+                .cliente(null)
+                .valorRecebido(BigDecimal.TEN)
+                .mobile(true)
+                .build();
+
+        Venda venda = Mockito.mock(Venda.class);
+        Mockito.when(repository.save(ArgumentMatchers.any(Venda.class))).thenReturn(venda);
+
+        vendaService.efetuarVenda(dto);
+
+        Mockito.verify(clienteRepository, Mockito.never()).findById(ArgumentMatchers.anyString());
+        Mockito.verify(titulosReceberService, Mockito.times(1)).gerarTituloAPartirVenda(ArgumentMatchers.eq(venda));
+        Mockito.verify(repository, Mockito.times(1)).save(ArgumentMatchers.any(Venda.class));
+        Mockito.verify(estoqueService, Mockito.times(1)).reduzirNoEstoque(ArgumentMatchers.anyString(), ArgumentMatchers.any(BigDecimal.class));
+    }
 
     @Test
     @DisplayName("deve remover uma venda")
