@@ -76,14 +76,14 @@ public class VendaControllerTest extends AplicationConfigTest {
         Assertions.assertEquals(jsonEsperado, response.getContentAsString());
     }
 
-    @Test
-    @DisplayName("deve retornar uma pagina de vendas")
-    public void testGetPage() {
-        Venda venda = Venda.builder()
-                .id("id-mock")
-                .build();
-        List<Venda> vendas = Collections.singletonList(venda);
-
-        when(repository.findAllByOrderByDataVendaDesc()).thenReturn(vendas);
-    }
+//    @Test
+//    @DisplayName("deve retornar uma pagina de vendas")
+//    public void testGetPage() {
+//        Venda venda = Venda.builder()
+//                .id("id-mock")
+//                .build();
+//        List<Venda> vendas = Collections.singletonList(venda);
+//
+//        when(repository.findAllByOrderByDataVendaDesc()).thenReturn(vendas);
+//    }
 }
