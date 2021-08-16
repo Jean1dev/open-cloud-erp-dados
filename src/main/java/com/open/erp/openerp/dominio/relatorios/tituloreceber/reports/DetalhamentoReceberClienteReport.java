@@ -71,12 +71,16 @@ public class DetalhamentoReceberClienteReport {
     }
 
     private static void addHistoricoVendas(Document document, Set<TituloComVendaDto> registros) throws DocumentException {
-        PdfPTable table = new PdfPTable(3);
+        PdfPTable table = new PdfPTable(4);
         table.setWidthPercentage(100);
-        table.setWidths(new int[]{4, 4, 4});
+        table.setWidths(new int[]{4, 4, 4, 4});
         Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
 
         PdfPCell hcell = new PdfPCell(new Phrase("Data venda", headFont));
+        hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(hcell);
+
+        hcell = new PdfPCell(new Phrase("Data limite para pagamento", headFont));
         hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(hcell);
 
@@ -90,6 +94,11 @@ public class DetalhamentoReceberClienteReport {
         registros.forEach(dto -> {
             PdfPCell cell;
             cell = new PdfPCell(new Phrase(dto.getVenda().getDataVenda().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))));
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase(dto.getTituloAReceber().getDataLimitePagamento().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))));
             cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             table.addCell(cell);

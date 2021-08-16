@@ -74,7 +74,7 @@ public class VendaService {
                 .mobile(dto.getMobile())
                 .build());
 
-        titulosReceberService.gerarTituloAPartirVenda(venda);
+        titulosReceberService.gerarTituloAPartirVenda(venda, dto);
     }
 
     private BigDecimal arredondar(BigDecimal valor) {

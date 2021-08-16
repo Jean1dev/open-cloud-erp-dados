@@ -3,6 +3,7 @@ package com.open.erp.openerp.dominio.titulosreceber.service;
 import com.open.erp.openerp.dominio.titulosreceber.api.dto.TituloComVendaDto;
 import com.open.erp.openerp.dominio.titulosreceber.model.TituloAReceber;
 import com.open.erp.openerp.dominio.titulosreceber.repository.TituloRebecerRepository;
+import com.open.erp.openerp.dominio.venda.api.dto.VendaDto;
 import com.open.erp.openerp.dominio.venda.model.Venda;
 import com.open.erp.openerp.dominio.venda.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class TitulosReceberService {
                 }).collect(Collectors.toSet());
     }
 
-    public void gerarTituloAPartirVenda(Venda venda) {
+    public void gerarTituloAPartirVenda(Venda venda, VendaDto dto) {
         if (verificarSeNaoDeveGerarTitulo(venda))
             return;
 
@@ -54,7 +55,16 @@ public class TitulosReceberService {
                 .vendaOrigem(venda.getId())
                 .valor(venda.getValorAReceber())
                 .quitado(false)
+                .dataLimitePagamento(getDataLimitePagamento(dto.getDataLimitePagamento()))
                 .build());
+    }
+
+    private LocalDate getDataLimitePagamento(LocalDate dataLimitePagamento) {
+        if (Objects.isNull(dataLimitePagamento)) {
+            dataLimitePagamento = LocalDate.now().plusDays(30);
+        }
+
+        return dataLimitePagamento;
     }
 
     public void quitarTitulo(String id) {

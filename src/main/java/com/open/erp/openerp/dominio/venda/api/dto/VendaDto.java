@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -20,6 +21,8 @@ public class VendaDto implements Serializable {
     private BigDecimal valorRecebido;
 
     private Boolean mobile;
+
+    private LocalDate dataLimitePagamento;
 
     @Getter
     @Setter
