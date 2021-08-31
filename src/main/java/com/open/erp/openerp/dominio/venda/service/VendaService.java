@@ -72,6 +72,7 @@ public class VendaService {
                 .cliente(getCliente(dto.getCliente()))
                 .valorRecebido(arredondar(dto.getValorRecebido()))
                 .mobile(dto.getMobile())
+                .dataLimitePagamento(dto.getDataLimitePagamento())
                 .build());
 
         titulosReceberService.gerarTituloAPartirVenda(venda, dto);

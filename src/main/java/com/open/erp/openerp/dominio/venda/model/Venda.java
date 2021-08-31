@@ -38,6 +38,9 @@ public class Venda implements Serializable {
 
     private Boolean mobile;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataLimitePagamento;
+
     @Builder
     private Venda(String id,
                   LocalDate dataVenda,
@@ -46,7 +49,8 @@ public class Venda implements Serializable {
                   BigDecimal valorAReceber,
                   List<ItemVenda> itens,
                   ClienteAgregado cliente,
-                  Boolean mobile) {
+                  Boolean mobile,
+                  LocalDate dataLimitePagamento) {
         this.id = id;
         this.dataVenda = dataVenda;
         this.valorTotal = valorTotal;
@@ -56,6 +60,7 @@ public class Venda implements Serializable {
         this.cliente = cliente;
         this.mobile = mobile;
         this.valorAReceber = calcularValorAReceber();
+        this.dataLimitePagamento = dataLimitePagamento;
     }
 
     private BigDecimal calcularValorAReceber() {

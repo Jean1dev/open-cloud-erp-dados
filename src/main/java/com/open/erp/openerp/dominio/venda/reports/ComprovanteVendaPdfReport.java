@@ -83,6 +83,10 @@ public class ComprovanteVendaPdfReport {
             document.add(new Paragraph("O cliente ainda deve um valor de R$: " + venda.getValorAReceber()));
         }
 
+        if (Objects.nonNull(venda.getDataLimitePagamento())) {
+            document.add(new Paragraph("Data limite de pagamento " + venda.getDataLimitePagamento().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))));
+        }
+
         document.close();
 
         return new ByteArrayInputStream(outputStream.toByteArray());
@@ -115,7 +119,7 @@ public class ComprovanteVendaPdfReport {
 
         PdfPTable tableEmpresa = new PdfPTable(2);
         tableEmpresa.setWidthPercentage(100);
-        tableEmpresa.setWidths(new int[] {2, 6});
+        tableEmpresa.setWidths(new int[]{2, 6});
         Image image1 = Image.getInstance(Objects.requireNonNull(ComprovanteVendaPdfReport.class.getClassLoader().getResource("img/logo.jpg")));
         image1.setAlignment(Element.ALIGN_RIGHT);
         image1.scaleAbsolute(112, 81);
@@ -133,7 +137,7 @@ public class ComprovanteVendaPdfReport {
 
     private static String getInformacoesEmpresa() {
         return "Globo EPI \n" +
-                "Telefone: (48) 99993-7595\n" +
+                "Telefone: (48) 99691-0970\n" +
                 "CNPJ: 38.496.625/0001-69\n" +
                 "IE: 260726486\n" +
                 "R SAO JOAO BATISTA, 36 - MORRO GRANDE - SANGAO - SC - 88.717-000";
