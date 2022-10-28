@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 services:
   mongodb:
     image: mongo:3.6
@@ -6,4 +6,5 @@ services:
       - "27017:27017"
     volumes:
       - /volumes/mongodb:/data
-    container_name: mongodb
+    container_name: mongodb_erp
+    network_mode: bridge
