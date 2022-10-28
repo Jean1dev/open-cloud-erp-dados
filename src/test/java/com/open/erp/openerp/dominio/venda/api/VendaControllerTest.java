@@ -1,6 +1,5 @@
 package com.open.erp.openerp.dominio.venda.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.open.erp.openerp.AplicationConfigTest;
 import com.open.erp.openerp.dominio.produto.service.ProdutoService;
@@ -22,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("VendaControllerTest")
 public class VendaControllerTest extends AplicationConfigTest {
