@@ -9,6 +9,7 @@ import com.open.erp.openerp.dominio.venda.api.dto.VendaDto;
 import com.open.erp.openerp.dominio.venda.model.ItemVenda;
 import com.open.erp.openerp.dominio.venda.model.Venda;
 import com.open.erp.openerp.dominio.venda.repository.VendaRepository;
+import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import javax.validation.ValidationException;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +39,8 @@ public class VendaServiceTest extends AplicationConfigTest {
 
     @MockBean
     private TitulosReceberService titulosReceberService;
+    @MockBean
+    private EnviarComprovanteVendaWhatsAppService enviarComprovanteVendaWhatsAppService;
 
     @Autowired
     private VendaService vendaService;
