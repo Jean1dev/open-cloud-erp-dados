@@ -136,7 +136,7 @@ public class ComprovanteVendaPdfReport {
     }
 
     private static String getInformacoesEmpresa() {
-        return "Globo EPI \n" +
+        return " NCP Globo EPI \n" +
                 "Telefone: (48) 99691-0970\n" +
                 "CNPJ: 38.496.625/0001-69\n" +
                 "IE: 260726486\n" +
