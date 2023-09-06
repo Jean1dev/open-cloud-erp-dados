@@ -34,6 +34,8 @@ public class VendaService {
 
     @Autowired
     private TitulosReceberService titulosReceberService;
+    @Autowired
+    private EnviarComprovanteVendaWhatsAppService enviarComprovanteVendaWhatsAppService;
 
     public void removerVenda(String vendaId) {
         Venda venda = repository.findById(vendaId).orElseThrow();
@@ -76,6 +78,7 @@ public class VendaService {
                 .build());
 
         titulosReceberService.gerarTituloAPartirVenda(venda, dto);
+        enviarComprovanteVendaWhatsAppService.enviar(venda);
     }
 
     private BigDecimal arredondar(BigDecimal valor) {

@@ -1,7 +1,11 @@
 server:
-  port: ${PORT}
+  port: ${PORT:8080}
 
 spring:
   data:
     mongodb:
-      uri: ${MONGO_URL}
+      uri: ${MONGO_URL:mongodb://localhost:27017/openerp}
+
+whats-api:
+  token: ${WHATS_TOKEN:no_token}
+  session: ${WHATS_SESSION:no_sess}
