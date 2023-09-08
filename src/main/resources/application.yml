@@ -10,6 +10,6 @@ whats-api:
   token: ${WHATS_TOKEN:no_token}
   session: ${WHATS_SESSION:no_sess}
 
-logging:
-  level:
-    root: WARN
+#logging:
+#  level:
+#    root: WARN

@@ -43,7 +43,7 @@ public class EnviarComprovanteVendaWhatsAppService {
         if (verificarNumeroValido(telefone)) {
             try {
                 String encutaredUrl = encurtarUrl(venda.getId());
-                enviarWhatsApp(encutaredUrl, telefone, venda);
+                enviarWhatsApp(encutaredUrl, "55" + telefone, venda);
             } catch (Exception e) {
                 log.error(e.getLocalizedMessage(), e);
             }
@@ -56,7 +56,7 @@ public class EnviarComprovanteVendaWhatsAppService {
         result = result.replace("(", "");
         result = result.replace(")", "");
         result = result.replace("-", "");
-        return "55" + result;
+        return result;
     }
 
     private void enviarWhatsApp(String encutaredUrl, String telefone, Venda venda) {
