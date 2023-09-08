@@ -38,9 +38,9 @@ public class EnviarComprovanteVendaWhatsAppService {
         if (cliente.isEmpty())
             return;
 
-        if (verificarSeClienteTemWhatsappValido(cliente.get())) {
+        var telefone = formatFone(cliente.get().getTelefone());
+        if (verificarNumeroValido(telefone)) {
             try {
-                var telefone = formatFone(cliente.get().getTelefone());
                 String encutaredUrl = encurtarUrl(venda.getId());
                 enviarWhatsApp(encutaredUrl, telefone, venda);
             } catch (Exception e) {
@@ -93,12 +93,12 @@ public class EnviarComprovanteVendaWhatsAppService {
         return responseEntity.getBody().get("urlEncurtada").asText();
     }
 
-    private boolean verificarSeClienteTemWhatsappValido(Cliente cliente) {
-        if (Objects.isNull(cliente.getTelefone()))
+    private boolean verificarNumeroValido(String telefone) {
+        if (Objects.isNull(telefone))
             return false;
 
         final var regex = "^[1-9]{2}[0-9]{8,9}$";
 
-        return Pattern.matches(regex, cliente.getTelefone());
+        return Pattern.matches(regex, telefone);
     }
 }
