@@ -40,12 +40,17 @@ public class EnviarComprovanteVendaWhatsAppService {
 
         if (verificarSeClienteTemWhatsappValido(cliente.get())) {
             try {
+                var telefone = formatFone(cliente.get().getTelefone());
                 String encutaredUrl = encurtarUrl(venda.getId());
-                enviarWhatsApp(encutaredUrl, cliente.get().getTelefone(), venda);
+                enviarWhatsApp(encutaredUrl, telefone, venda);
             } catch (Exception e) {
                 log.error(e.getLocalizedMessage(), e);
             }
         }
+    }
+
+    private String formatFone(String telefone) {
+        return telefone.replace(" -()", "").trim();
     }
 
     private void enviarWhatsApp(String encutaredUrl, String telefone, Venda venda) {
