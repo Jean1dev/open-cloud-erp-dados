@@ -50,7 +50,12 @@ public class EnviarComprovanteVendaWhatsAppService {
     }
 
     private String formatFone(String telefone) {
-        return telefone.replace(" -()", "").trim();
+        String result = telefone.trim();
+        result = result.replace(" ", "");
+        result = result.replace("(", "");
+        result = result.replace(")", "");
+        result = result.replace("-", "");
+        return "55" + result;
     }
 
     private void enviarWhatsApp(String encutaredUrl, String telefone, Venda venda) {
@@ -66,7 +71,7 @@ public class EnviarComprovanteVendaWhatsAppService {
                 Data: %s
                 Acesse o comprovante Online atraves do link -> %s
                 """, venda.getValorTotal(), venda.getDataVenda(), encutaredUrl);
-        body.add("id", "55" + telefone);
+        body.add("id", telefone);
         body.add("message", message);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
