@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.open.erp.openerp.dominio.cliente.model.Cliente;
 import com.open.erp.openerp.dominio.cliente.repository.ClienteRepository;
 import com.open.erp.openerp.dominio.venda.model.Venda;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -22,8 +23,8 @@ import java.util.regex.Pattern;
 
 @Service
 @EnableAsync
-@Slf4j
 public class EnviarComprovanteVendaWhatsAppService {
+    Logger log = LoggerFactory.getLogger(EnviarComprovanteVendaWhatsAppService.class);
 
     @Autowired
     private ClienteRepository clienteRepository;
