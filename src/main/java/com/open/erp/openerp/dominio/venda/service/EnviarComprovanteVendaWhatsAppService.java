@@ -73,7 +73,8 @@ public class EnviarComprovanteVendaWhatsAppService {
                 """, venda.getValorTotal(), venda.getDataVenda(), encutaredUrl);
         body.add("id", telefone);
         body.add("message", message);
-
+        log.info(String.format("Enviando whats para %s", telefone));
+        
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("key", WHATS_SESSION);
 
