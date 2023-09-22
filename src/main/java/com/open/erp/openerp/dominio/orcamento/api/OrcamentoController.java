@@ -66,6 +66,13 @@ public class OrcamentoController {
         repository.deleteById(id);
     }
 
+    @PostMapping("{id}/enviar-comprovante")
+    public void enviarComprovante(@PathVariable("id") String idOrcamento, @RequestParam("fone") String fone) throws DocumentException, IOException {
+        Orcamento orcamento = repository.findById(idOrcamento).orElseThrow();
+        ByteArrayInputStream comprovante = ComprovanteOrcamentoPdfReport.gerarComprovante(orcamento, produtoService);
+        service.enviarComprovantePeloWhatsapp(comprovante, fone);
+    }
+
     @GetMapping(path = "gerar-comprovante", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> gerarComprovante(@RequestParam(value = "id") String id) throws DocumentException, IOException {
         Orcamento orcamento = repository.findById(id).orElseThrow();

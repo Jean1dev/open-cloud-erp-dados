@@ -8,15 +8,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -50,6 +55,43 @@ public class EnviarComprovanteVendaWhatsAppService {
         }
     }
 
+    @Async
+    public void enviarComprovantePdf(ByteArrayInputStream comprovante, String telefone, String descricao) {
+        if (verificarNumeroValido(telefone)) {
+            telefone = "55" + formatFone(telefone);
+            var url = "https://whatsapp-api-da7eccbe4a89.herokuapp.com/message/doc";
+            var authorization = "Bearer " + WHATS_TOKEN;
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            headers.set("Authorization", authorization);
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+
+            try {
+                byte[] bytes = FileCopyUtils.copyToByteArray(comprovante);
+                var temp = Files.createTempFile("temp", ".pdf").toFile();
+                var outputStream = new FileOutputStream(temp);
+                outputStream.write(bytes);
+
+                body.add("file", new FileSystemResource(temp));
+                body.add("id", telefone);
+                body.add("filename", descricao);
+
+                var builder = UriComponentsBuilder.fromHttpUrl(url)
+                        .queryParam("key", WHATS_SESSION);
+                var requestEntity = new HttpEntity<>(body, headers);
+
+                var restTemplate = new RestTemplate();
+                var responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, requestEntity, String.class);
+                log.info("WhatsApp response status " + responseEntity.getStatusCode());
+
+                temp.deleteOnExit();
+
+            } catch (Exception e) {
+                log.error(e.getLocalizedMessage(), e);
+            }
+        }
+    }
+
     private String formatFone(String telefone) {
         String result = telefone.trim();
         result = result.replace(" ", "");
@@ -75,7 +117,7 @@ public class EnviarComprovanteVendaWhatsAppService {
         body.add("id", telefone);
         body.add("message", message);
         log.info(String.format("Enviando whats para %s", telefone));
-        
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("key", WHATS_SESSION);
 

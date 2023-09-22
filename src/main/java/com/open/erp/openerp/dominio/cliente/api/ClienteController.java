@@ -22,6 +22,11 @@ public class ClienteController {
         repository.save(cliente);
     }
 
+    @PutMapping
+    public void atualizar(@Valid @RequestBody Cliente cliente) {
+        repository.save(cliente);
+    }
+
     @GetMapping
     public List<Cliente> findAll() {
         return repository.findAll();
