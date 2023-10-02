@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -30,6 +31,13 @@ public class ClienteController {
     @GetMapping
     public List<Cliente> findAll() {
         return repository.findAll();
+    }
+
+    @GetMapping(path = "telefone")
+    public String getTelefoneCliente(@RequestParam(value = "id") String idClient) {
+        return repository.findById(idClient)
+                .map(Cliente::getTelefone)
+                .orElseThrow();
     }
 
     @GetMapping(path = "paginated")
