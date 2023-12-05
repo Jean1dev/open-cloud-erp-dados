@@ -1,6 +1,7 @@
 package com.open.erp.openerp.context;
 
 public class TenantContext {
+    // https://rajesh-gupta89.medium.com/multi-tenancy-implementation-using-spring-boot-mongo-db9998156f62
     protected static final ThreadLocal<String> threadLocal = new InheritableThreadLocal<>() {
         @Override
         protected String initialValue() {

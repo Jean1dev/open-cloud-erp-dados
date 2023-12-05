@@ -23,9 +23,11 @@ public class TenantFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tenant)) {
             log.info("setting context " + tenant);
             TenantContext.setTenantId(tenant);
+            filterChain.doFilter(request, response);
+            TenantContext.clear();
+            return;
         }
 
         filterChain.doFilter(request, response);
-        log.info("request finished");
     }
 }
