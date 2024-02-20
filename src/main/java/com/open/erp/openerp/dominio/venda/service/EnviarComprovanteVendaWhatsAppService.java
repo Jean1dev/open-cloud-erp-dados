@@ -87,7 +87,8 @@ public class EnviarComprovanteVendaWhatsAppService {
                 temp.deleteOnExit();
 
             } catch (Exception e) {
-                log.error(e.getLocalizedMessage(), e);
+                log.info(e.getLocalizedMessage());
+                log.error(e.getMessage(), e);
             }
         }
     }
