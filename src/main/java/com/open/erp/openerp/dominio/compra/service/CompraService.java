@@ -1,5 +1,6 @@
 package com.open.erp.openerp.dominio.compra.service;
 
+import com.open.erp.openerp.commons.ComprovantesWhatsappService;
 import com.open.erp.openerp.dominio.compra.api.dto.CompraDto;
 import com.open.erp.openerp.dominio.compra.model.Compra;
 import com.open.erp.openerp.dominio.compra.model.FornecedorAgregado;
@@ -30,6 +31,8 @@ public class CompraService {
 
     @Autowired
     private FornecedorRepository fornecedorRepository;
+    @Autowired
+    private ComprovantesWhatsappService comprovantesWhatsappService;
 
     public void efetuarCompra(CompraDto dto) {
         List<ItemCompra> itemCompras = dto.getItens()
@@ -38,17 +41,20 @@ public class CompraService {
                 .collect(Collectors.toList());
 
         BigDecimal total = itemCompras.stream()
-                .map(itemCompra -> itemCompra.getValorTotal())
-                .reduce(BigDecimal.ZERO, (somatorio, valorUnitario) -> somatorio.add(valorUnitario));
+                .map(ItemCompra::getValorTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         itemCompras.forEach(itemCompra -> estoqueService.adicionarNoEstoque(itemCompra.getProdutoId(), itemCompra.getQuantidade()));
 
-        repository.save(Compra.builder()
+        Compra saved = repository.save(Compra.builder()
                 .valorTotal(total)
                 .itens(itemCompras)
                 .dataCompra(LocalDate.now())
                 .fornecedor(getFornecedor(dto.getFornecedor()))
                 .build());
+
+        if (dto.isEnviarComprovante())
+            comprovantesWhatsappService.enviar(saved);
     }
 
     private FornecedorAgregado getFornecedor(String fornecedor) {

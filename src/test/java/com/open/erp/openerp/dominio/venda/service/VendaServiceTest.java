@@ -1,6 +1,7 @@
 package com.open.erp.openerp.dominio.venda.service;
 
 import com.open.erp.openerp.AplicationConfigTest;
+import com.open.erp.openerp.commons.ComprovantesWhatsappService;
 import com.open.erp.openerp.dominio.cliente.repository.ClienteRepository;
 import com.open.erp.openerp.dominio.estoque.service.EstoqueService;
 import com.open.erp.openerp.dominio.titulosreceber.model.TituloAReceber;
@@ -40,7 +41,7 @@ public class VendaServiceTest extends AplicationConfigTest {
     @MockBean
     private TitulosReceberService titulosReceberService;
     @MockBean
-    private EnviarComprovanteVendaWhatsAppService enviarComprovanteVendaWhatsAppService;
+    private ComprovantesWhatsappService comprovantesWhatsappService;
 
     @Autowired
     private VendaService vendaService;

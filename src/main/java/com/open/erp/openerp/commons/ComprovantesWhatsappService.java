@@ -1,8 +1,12 @@
-package com.open.erp.openerp.dominio.venda.service;
+package com.open.erp.openerp.commons;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.open.erp.openerp.dominio.cliente.model.Cliente;
 import com.open.erp.openerp.dominio.cliente.repository.ClienteRepository;
+import com.open.erp.openerp.dominio.compra.model.Compra;
+import com.open.erp.openerp.dominio.fornecedor.model.Fornecedor;
+import com.open.erp.openerp.dominio.fornecedor.repositoy.FornecedorRepository;
+import com.open.erp.openerp.dominio.produto.service.ProdutoService;
 import com.open.erp.openerp.dominio.venda.model.Venda;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +32,42 @@ import java.util.regex.Pattern;
 
 @Service
 @EnableAsync
-public class EnviarComprovanteVendaWhatsAppService {
-    Logger log = LoggerFactory.getLogger(EnviarComprovanteVendaWhatsAppService.class);
+public class ComprovantesWhatsappService {
+    Logger log = LoggerFactory.getLogger(ComprovantesWhatsappService.class);
 
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired
+    private FornecedorRepository fornecedorRepository;
+    @Autowired
+    private ProdutoService produtoService;
+
     @Value("${whats-api.token}")
     private String WHATS_TOKEN;
     @Value("${whats-api.session}")
     private String WHATS_SESSION;
+
+    @Async
+    public void enviar(Compra compra) {
+        Optional<Fornecedor> optFornecedor = fornecedorRepository.findById(compra.getFornecedor().getFornecedorId());
+        if (optFornecedor.isEmpty())
+            return;
+
+        var telefone = formatFone(optFornecedor.get().getTelefone());
+        if (verificarNumeroValido(telefone)) {
+            try {
+                var message = new StringBuilder();
+                compra.getItens().forEach(itemCompra -> {
+                    String nomeProduto = produtoService.getNomeProduto(itemCompra.getProdutoId());
+                    message.append(String.format("Produto: %s\nQuantidade: %s\nValor: R$ %s\n\n", nomeProduto, itemCompra.getQuantidade(), itemCompra.getValorTotal()));
+                });
+
+                enviarWhatsApp("55" + telefone, message.toString());
+            } catch (Exception e) {
+                log.error(e.getLocalizedMessage(), e);
+            }
+        }
+    }
 
     @Async
     public void enviar(Venda venda) {
@@ -48,7 +79,14 @@ public class EnviarComprovanteVendaWhatsAppService {
         if (verificarNumeroValido(telefone)) {
             try {
                 String encutaredUrl = encurtarUrl(venda.getId());
-                enviarWhatsApp(encutaredUrl, "55" + telefone, venda);
+                var message = String.format("""
+                        Comprovante de venda referente a compra em NCP Globo Epi
+                        valor total: R$ %s
+                        Data: %s
+                        Acesse o comprovante Online atraves do link -> %s
+                        """, venda.getValorTotal(), venda.getDataVenda(), encutaredUrl);
+
+                enviarWhatsApp("55" + telefone, message);
             } catch (Exception e) {
                 log.error(e.getLocalizedMessage(), e);
             }
@@ -102,19 +140,14 @@ public class EnviarComprovanteVendaWhatsAppService {
         return result;
     }
 
-    private void enviarWhatsApp(String encutaredUrl, String telefone, Venda venda) {
+    private void enviarWhatsApp(String telefone, String message) {
         var url = "https://whatsapp-api-da7eccbe4a89.herokuapp.com/message/text";
         var authorization = "Bearer " + WHATS_TOKEN;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.set("Authorization", authorization);
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        var message = String.format("""
-                Comprovante de venda referente a compra em NCP Globo Epi
-                valor total: R$ %s
-                Data: %s
-                Acesse o comprovante Online atraves do link -> %s
-                """, venda.getValorTotal(), venda.getDataVenda(), encutaredUrl);
+
         body.add("id", telefone);
         body.add("message", message);
         log.info(String.format("Enviando whats para %s", telefone));

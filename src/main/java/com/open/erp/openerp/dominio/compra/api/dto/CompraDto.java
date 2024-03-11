@@ -18,6 +18,7 @@ public class CompraDto implements Serializable {
     private List<ItemCompraDto> itens;
 
     private String fornecedor;
+    private boolean enviarComprovante;
 
     @Getter
     @Setter

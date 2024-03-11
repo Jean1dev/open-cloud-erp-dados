@@ -7,8 +7,8 @@ spring:
       uri: ${MONGO_URL:mongodb://localhost:27017/openerp}
 
 whats-api:
-  token: ${WHATS_TOKEN:no_token}
-  session: ${WHATS_SESSION:no_sess}
+  token: ${WHATS_TOKEN:3n3HD2qWmeb6!hX5eQ01}
+  session: ${WHATS_SESSION:PAI_CELULAR}
 
 #logging:
 #  level:

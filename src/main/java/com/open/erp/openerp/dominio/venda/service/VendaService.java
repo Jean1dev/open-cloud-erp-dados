@@ -1,5 +1,6 @@
 package com.open.erp.openerp.dominio.venda.service;
 
+import com.open.erp.openerp.commons.ComprovantesWhatsappService;
 import com.open.erp.openerp.dominio.cliente.model.Cliente;
 import com.open.erp.openerp.dominio.cliente.repository.ClienteRepository;
 import com.open.erp.openerp.dominio.estoque.service.EstoqueService;
@@ -35,7 +36,7 @@ public class VendaService {
     @Autowired
     private TitulosReceberService titulosReceberService;
     @Autowired
-    private EnviarComprovanteVendaWhatsAppService enviarComprovanteVendaWhatsAppService;
+    private ComprovantesWhatsappService comprovantesWhatsappService;
 
     public void removerVenda(String vendaId) {
         Venda venda = repository.findById(vendaId).orElseThrow();
@@ -78,7 +79,7 @@ public class VendaService {
                 .build());
 
         titulosReceberService.gerarTituloAPartirVenda(venda, dto);
-        enviarComprovanteVendaWhatsAppService.enviar(venda);
+        comprovantesWhatsappService.enviar(venda);
     }
 
     private BigDecimal arredondar(BigDecimal valor) {
