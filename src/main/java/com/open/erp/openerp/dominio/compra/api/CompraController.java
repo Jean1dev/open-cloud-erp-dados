@@ -4,7 +4,6 @@ import com.open.erp.openerp.dominio.compra.api.dto.CompraDto;
 import com.open.erp.openerp.dominio.compra.model.Compra;
 import com.open.erp.openerp.dominio.compra.repository.CompraRepository;
 import com.open.erp.openerp.dominio.compra.service.CompraService;
-import com.open.erp.openerp.dominio.produto.model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
