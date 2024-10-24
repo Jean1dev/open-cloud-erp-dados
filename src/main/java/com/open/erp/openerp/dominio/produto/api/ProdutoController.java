@@ -2,12 +2,12 @@ package com.open.erp.openerp.dominio.produto.api;
 
 import com.open.erp.openerp.dominio.produto.model.Produto;
 import com.open.erp.openerp.dominio.produto.repository.ProdutoRepository;
+import com.open.erp.openerp.dominio.produto.service.ProdutoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,6 +16,8 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoRepository repository;
+    @Autowired
+    private ProdutoService produtoService;
 
     @PostMapping
     public void criar(@Valid @RequestBody Produto produto) {
@@ -29,8 +31,9 @@ public class ProdutoController {
 
     @GetMapping(path = "paginated")
     public Page<Produto> getPage(@RequestParam(value = "limit", defaultValue = "10", required = false) Integer limit,
-                                 @RequestParam(value = "offset", defaultValue = "0", required = false) Integer offset) {
-        return repository.findAll(PageRequest.of(offset, limit));
+                                 @RequestParam(value = "offset", defaultValue = "0", required = false) Integer offset,
+                                 ProdutosSearchCriteria searchCriteria) {
+        return produtoService.peformSearch(searchCriteria.nome(), limit, offset);
     }
 
     @PutMapping(path = "{id}")
