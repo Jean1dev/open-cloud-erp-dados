@@ -1,4 +1,4 @@
-FROM gradle:7.6.1-jdk17-alpine AS builder
+FROM gradle:8.5.0-jdk21-alpine AS builder
 
 WORKDIR /usr/app/
 
@@ -7,7 +7,7 @@ COPY . .
 #RUN gradle build -x test
 RUN gradle bootJar
 
-FROM eclipse-temurin:17.0.6_10-jre-alpine
+FROM eclipse-temurin:21.0.3_9-jdk-alpine
 
 COPY --from=builder /usr/app/build/libs/*.jar /opt/app/application.jar
 

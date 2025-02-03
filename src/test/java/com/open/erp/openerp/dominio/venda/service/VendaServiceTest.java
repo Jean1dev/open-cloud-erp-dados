@@ -89,7 +89,7 @@ public class VendaServiceTest extends AplicationConfigTest {
         vendaService.efetuarVenda(dto);
 
         Mockito.verify(clienteRepository, Mockito.never()).findById(ArgumentMatchers.anyString());
-        Mockito.verify(titulosReceberService, Mockito.times(1)).gerarTituloAPartirVenda(ArgumentMatchers.eq(venda), dto);
+        Mockito.verify(titulosReceberService, Mockito.times(1)).gerarTituloAPartirVenda(ArgumentMatchers.eq(venda), ArgumentMatchers.eq(dto));
         Mockito.verify(repository, Mockito.times(1)).save(ArgumentMatchers.any(Venda.class));
         Mockito.verify(estoqueService, Mockito.times(1)).reduzirNoEstoque(ArgumentMatchers.anyString(), ArgumentMatchers.any(BigDecimal.class));
     }

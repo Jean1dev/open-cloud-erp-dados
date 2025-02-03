@@ -4,14 +4,26 @@ import scala.concurrent.duration._
 
 class StressTestSimulation extends Simulation {
 
-  val httpProtocol = http
-    .baseUrl("http://localhost:8080")
-    .header("X-Tenant", "tenant2")
-    .header("Cookie", "JSESSIONID=20D45B27B5A11F727EC88EE9D8D41CDA")
+  val authorization = "Bearer token"
 
-  val scn = scenario("Stress Test")
+  val httpProtocol = http
+    .baseUrl("https://url.com.br")
+    .header("Content-Type", "application/json")
+    .header("Authorization", authorization)
+    .disableFollowRedirect
+
+  val requestBody = StringBody(
+    """
+      {
+        "document": "documento",
+        "attributes": ["NAME", "ADDRESSES", "DOCUMENT", "REGISTRATIONSTATUS"]
+      }
+    """.stripMargin)
+
+  val scn = scenario(" API Test")
     .exec(http("request")
-      .get("/cliente"))
+      .post("/ms-da/enrichment/v1/enrichments/people")
+      .body(requestBody).asJson)
 
   setUp(
     scn.inject(
