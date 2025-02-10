@@ -71,7 +71,7 @@ public class VendaControllerTest extends AplicationConfigTest {
                 .andReturn()
                 .getResponse();
 
-        String jsonEsperado = "[{\"id\":\"id-mock\",\"dataVenda\":null,\"valorTotal\":null,\"valorRecebido\":null,\"valorAReceber\":null,\"itens\":null,\"cliente\":null,\"mobile\":null}]";
+        String jsonEsperado = "[{\"id\":\"id-mock\",\"dataVenda\":null,\"valorTotal\":null,\"valorRecebido\":null,\"valorAReceber\":null,\"itens\":null,\"cliente\":null,\"mobile\":null,\"dataLimitePagamento\":null}]";
         Assertions.assertEquals(jsonEsperado, response.getContentAsString());
     }
 
