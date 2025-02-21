@@ -38,12 +38,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-jar {
-	manifest {
-		attributes(
-				'Main-Class': 'com.open.erp.openerp.OpenErpApplication'
-		)
-	}
-
+bootJar {
 	archiveFileName.set('application.jar')
+	destinationDirectory.set(file("${rootProject.buildDir}/libs"))
 }
