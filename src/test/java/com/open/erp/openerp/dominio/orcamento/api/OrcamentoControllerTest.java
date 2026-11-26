@@ -8,7 +8,7 @@ import com.open.erp.openerp.dominio.produto.service.ProdutoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,10 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class OrcamentoControllerTest extends AplicationConfigTest {
 
-    @MockBean
+    @MockitoBean
     private OrcamentoRepository orcamentoRepository;
 
-    @MockBean
+    @MockitoBean
     private ProdutoService produtoService;
 
     @Autowired

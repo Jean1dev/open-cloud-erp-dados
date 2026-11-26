@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,13 +26,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("VendaControllerTest")
 public class VendaControllerTest extends AplicationConfigTest {
 
-    @MockBean
+    @MockitoBean
     private VendaService service;
 
-    @MockBean
+    @MockitoBean
     private VendaRepository repository;
 
-    @MockBean
+    @MockitoBean
     private ProdutoService produtoService;
 
     @Autowired

@@ -114,7 +114,7 @@ public class ComprovantesWhatsappService {
                 body.add("id", telefone);
                 body.add("filename", descricao);
 
-                var builder = UriComponentsBuilder.fromHttpUrl(url)
+                var builder = UriComponentsBuilder.fromUriString(url)
                         .queryParam("key", WHATS_SESSION);
                 var requestEntity = new HttpEntity<>(body, headers);
 
@@ -152,7 +152,7 @@ public class ComprovantesWhatsappService {
         body.add("message", message);
         log.info(String.format("Enviando whats para %s", telefone));
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
                 .queryParam("key", WHATS_SESSION);
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);

@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -29,18 +29,18 @@ import java.util.stream.IntStream;
 @DisplayName("VendaServiceTest")
 public class VendaServiceTest extends AplicationConfigTest {
 
-    @MockBean
+    @MockitoBean
     private VendaRepository repository;
 
-    @MockBean
+    @MockitoBean
     private EstoqueService estoqueService;
 
-    @MockBean
+    @MockitoBean
     private ClienteRepository clienteRepository;
 
-    @MockBean
+    @MockitoBean
     private TitulosReceberService titulosReceberService;
-    @MockBean
+    @MockitoBean
     private ComprovantesWhatsappService comprovantesWhatsappService;
 
     @Autowired

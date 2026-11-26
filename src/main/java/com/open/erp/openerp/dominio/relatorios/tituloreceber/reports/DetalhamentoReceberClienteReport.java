@@ -1,7 +1,6 @@
 package com.open.erp.openerp.dominio.relatorios.tituloreceber.reports;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.html.WebColors;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -154,6 +153,6 @@ public class DetalhamentoReceberClienteReport {
     }
 
     private static BaseColor getCinza() {
-        return WebColors.getRGBColor("#57636e");
+        return new BaseColor(0x57, 0x63, 0x6e);
     }
 }
