@@ -1,6 +1,6 @@
 package com.open.erp.openerp.dominio.venda.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.open.erp.openerp.AplicationConfigTest;
 import com.open.erp.openerp.dominio.produto.service.ProdutoService;
 import com.open.erp.openerp.dominio.venda.api.dto.VendaDto;
@@ -72,7 +72,8 @@ public class VendaControllerTest extends AplicationConfigTest {
                 .getResponse();
 
         String jsonEsperado = "[{\"id\":\"id-mock\",\"dataVenda\":null,\"valorTotal\":null,\"valorRecebido\":null,\"valorAReceber\":null,\"itens\":null,\"cliente\":null,\"mobile\":null,\"dataLimitePagamento\":null}]";
-        Assertions.assertEquals(jsonEsperado, response.getContentAsString());
+        ObjectMapper objectMapper = new ObjectMapper();
+        Assertions.assertEquals(objectMapper.readTree(jsonEsperado), objectMapper.readTree(response.getContentAsString()));
     }
 
 //    @Test

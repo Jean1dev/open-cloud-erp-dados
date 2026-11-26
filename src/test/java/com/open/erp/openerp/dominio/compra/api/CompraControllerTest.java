@@ -1,6 +1,6 @@
 package com.open.erp.openerp.dominio.compra.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.open.erp.openerp.AplicationConfigTest;
 import com.open.erp.openerp.dominio.compra.api.dto.CompraDto;
 import com.open.erp.openerp.dominio.compra.model.Compra;
