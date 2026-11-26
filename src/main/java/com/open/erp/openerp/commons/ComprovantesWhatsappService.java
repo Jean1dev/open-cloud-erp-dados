@@ -1,6 +1,5 @@
 package com.open.erp.openerp.commons;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.open.erp.openerp.dominio.cliente.model.Cliente;
 import com.open.erp.openerp.dominio.cliente.repository.ClienteRepository;
 import com.open.erp.openerp.dominio.compra.model.Compra;
@@ -13,15 +12,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import tools.jackson.databind.JsonNode;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
@@ -46,6 +47,8 @@ public class ComprovantesWhatsappService {
     private String WHATS_TOKEN;
     @Value("${whats-api.session}")
     private String WHATS_SESSION;
+
+    private final RestClient restClient = RestClient.create();
 
     @Async
     public void enviar(Compra compra) {
@@ -98,10 +101,6 @@ public class ComprovantesWhatsappService {
         if (verificarNumeroValido(telefone)) {
             telefone = "55" + formatFone(telefone);
             var url = "https://whatsapp-api-da7eccbe4a89.herokuapp.com/message/doc";
-            var authorization = "Bearer " + WHATS_TOKEN;
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-            headers.set("Authorization", authorization);
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
             try {
@@ -114,12 +113,16 @@ public class ComprovantesWhatsappService {
                 body.add("id", telefone);
                 body.add("filename", descricao);
 
-                var builder = UriComponentsBuilder.fromHttpUrl(url)
+                var builder = UriComponentsBuilder.fromUriString(url)
                         .queryParam("key", WHATS_SESSION);
-                var requestEntity = new HttpEntity<>(body, headers);
 
-                var restTemplate = new RestTemplate();
-                var responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, requestEntity, String.class);
+                ResponseEntity<String> responseEntity = restClient.post()
+                        .uri(builder.toUriString())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .header("Authorization", "Bearer " + WHATS_TOKEN)
+                        .body(body)
+                        .retrieve()
+                        .toEntity(String.class);
                 log.info("WhatsApp response status " + responseEntity.getStatusCode());
 
                 temp.deleteOnExit();
@@ -142,23 +145,22 @@ public class ComprovantesWhatsappService {
 
     private void enviarWhatsApp(String telefone, String message) {
         var url = "https://whatsapp-api-da7eccbe4a89.herokuapp.com/message/text";
-        var authorization = "Bearer " + WHATS_TOKEN;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", authorization);
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
 
         body.add("id", telefone);
         body.add("message", message);
         log.info(String.format("Enviando whats para %s", telefone));
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
                 .queryParam("key", WHATS_SESSION);
 
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restClient.post()
+                .uri(builder.toUriString())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .header("Authorization", "Bearer " + WHATS_TOKEN)
+                .body(body)
+                .retrieve()
+                .toEntity(String.class);
         log.info("WhatsApp response status " + responseEntity.getStatusCode());
     }
 
@@ -166,14 +168,15 @@ public class ComprovantesWhatsappService {
         var url = "https://api.encurtador.dev/encurtamentos";
         var urlFinal = "https://api-open-cloud-erp-bc78e9246ecc.herokuapp.com/venda/gerar-comprovante?id=" + id;
         var corpo = "{ \"url\": \"" + urlFinal + "\" }";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> requestEntity = new HttpEntity<>(corpo, headers);
 
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JsonNode> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, JsonNode.class);
+        JsonNode responseBody = restClient.post()
+                .uri(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(corpo)
+                .retrieve()
+                .body(JsonNode.class);
 
-        return responseEntity.getBody().get("urlEncurtada").asText();
+        return responseBody.get("urlEncurtada").asString();
     }
 
     private boolean verificarNumeroValido(String telefone) {

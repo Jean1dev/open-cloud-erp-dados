@@ -1,44 +1,48 @@
 plugins {
-	id 'org.springframework.boot' version '3.2.5'
-	id 'io.spring.dependency-management' version '1.1.4'
-	id 'io.gatling.gradle' version "3.10.5"
 	id 'java'
+	id 'org.springframework.boot' version '4.2.0'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'io.gatling.gradle' version "3.16.1"
 }
 
 group = 'com.open.erp'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+	sourceCompatibility = '25'
 }
 
 repositories {
 	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
-	maven { url 'https://repo.spring.io/snapshot' }
+	maven { url = 'https://repo.spring.io/milestone' }
+	maven { url = 'https://repo.spring.io/snapshot' }
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:3.2.5'
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-restclient'
 	implementation 'com.itextpdf:itextpdf:5.5.12'
 
-	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 
-	compileOnly 'org.projectlombok:lombok:1.18.24'
-	compileOnly("io.gatling.highcharts:gatling-charts-highcharts:3.10.5")
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'
+}
 
-	annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	jvmArgs '-XX:+EnableDynamicAgentLoading', '-Xshare:off'
 }
 
 bootJar {
 	archiveFileName.set('application.jar')
-	destinationDirectory.set(file("${rootProject.buildDir}/libs"))
+	destinationDirectory.set(layout.buildDirectory.dir('libs'))
 }

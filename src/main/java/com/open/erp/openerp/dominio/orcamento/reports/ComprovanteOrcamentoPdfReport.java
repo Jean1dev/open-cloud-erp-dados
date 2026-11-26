@@ -1,7 +1,6 @@
 package com.open.erp.openerp.dominio.orcamento.reports;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.html.WebColors;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -158,7 +157,7 @@ public class ComprovanteOrcamentoPdfReport {
     }
 
     private static BaseColor getCinza() {
-        return WebColors.getRGBColor("#57636e");
+        return new BaseColor(0x57, 0x63, 0x6e);
     }
 
     private static Paragraph tituloReport() {

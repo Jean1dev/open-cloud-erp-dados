@@ -2,14 +2,9 @@ server:
   port: ${PORT:8080}
 
 spring:
-  data:
-    mongodb:
-      uri: ${MONGO_URL:mongodb://localhost:27017/openerp}
+  mongodb:
+    uri: ${MONGO_URL:mongodb://localhost:27017/openerp}
 
 whats-api:
   token: ${WHATS_TOKEN:3n3HD2qWmeb6!hX5eQ01}
   session: ${WHATS_SESSION:PAI_CELULAR}
-
-#logging:
-#  level:
-#    root: WARN

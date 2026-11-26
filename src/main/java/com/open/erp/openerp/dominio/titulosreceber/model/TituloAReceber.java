@@ -34,6 +34,7 @@ public class TituloAReceber implements Serializable {
 
     private String clienteNome;
 
+    @Builder.Default
     private Boolean quitado = false;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
